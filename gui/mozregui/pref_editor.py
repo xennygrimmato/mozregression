@@ -1,4 +1,4 @@
-from PyQt4.QtCore import QAbstractTableModel, QModelIndex, Qt, \
+from PyQt4.QtCore import QString, QAbstractTableModel, QModelIndex, Qt, \
     pyqtSlot as Slot
 from PyQt4.QtGui import QFileDialog, QWidget
 from mozprofile.prefs import Preferences
@@ -30,13 +30,13 @@ class PreferencesModel(QAbstractTableModel):
             if index.column() == 0:
                 return name
             else:
-                return repr(value)
+                return '"' + QString(value).__str__() + '"'
 
     def flags(self, index):
         return Qt.ItemIsSelectable | Qt.ItemIsEditable | Qt.ItemIsEnabled
 
     def setData(self, index, new_value, role=Qt.EditRole):
-        new_value = str(new_value.toString())
+        new_value = unicode(new_value.toString())
         name, value = self.prefs[index.row()]
         if index.column() == 0:
             # change pref name
